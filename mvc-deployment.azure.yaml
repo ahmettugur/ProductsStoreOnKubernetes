@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: mvc
-        image: ahmettugur/products-store-mvc:v2.#{$(Build.BuildId)}#
+        image: ahmettugur/products-store-mvc:v2.#{Build.BuildId}#
         ports:
         - containerPort: 80
         env:
