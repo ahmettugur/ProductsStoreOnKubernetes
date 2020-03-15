@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mvc-deployment
+  labels:
+    app: mvc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mvc
+  template:
+    metadata:
+      labels:
+        app: mvc
+    spec:
+      containers:
+      - name: mvc
+        image: ahmettugur/products-store-mvc:v1.0
+        ports:
+        - containerPort: 80
+        env:
+          - name: ConnectionStrings__ProductsContext
+            valueFrom:
+              secretKeyRef:
+                name: mssql-secret
+                key: db-connection-string-secret
+#              configMapKeyRef:
+#                name: mssql-connection-configmap
+#                key: db-connection-string
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mvc-service
+spec:
+  selector:
+    app: mvc
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 30100
+  type: NodePort
+    
